@@ -33,6 +33,8 @@ public class DAG <Value>//<Key extends Comparable<Key>, Value>
         public Node(Value val)
         {
         	this.val = val;
+        	ancestors = new ArrayList<Node>(0);
+        	decendents = new ArrayList<Node>(0);
         	//ancestors = null;
         	//decendents = null;
         	depth = -1;
@@ -55,12 +57,22 @@ public class DAG <Value>//<Key extends Comparable<Key>, Value>
         {
         	return ancestors;
         }
+        public String toString()
+        {
+        	String output = "";
+    		for(int i = 0; i < decendents.size(); i++)
+    		{
+    			output += decendents.get(i).val;
+    		}
+    		return output;
+        }
         public ArrayList<Node> listAllAnc()
         {
         	ArrayList<Node> output = null;
         	for(int i = 0; i < ancestors.size(); i++)
         	{
         		Node temp = (DAG<Value>.Node) this.ancestors.get(i);
+        		output.add(temp); //is this necessary?
         		List<Node> listTwoCopy = new ArrayList<>(temp.listAllAnc());
                 listTwoCopy.removeAll(output);
                 output.addAll(listTwoCopy);
@@ -76,6 +88,7 @@ public class DAG <Value>//<Key extends Comparable<Key>, Value>
 	}
 	public DAG(Value[] input)
 	{
+		allNodes = new ArrayList<Node>(0);
 		for(int i = 0; i < input.length; i++)
 		{
 			Node temp = new Node(input[i]);
@@ -83,14 +96,66 @@ public class DAG <Value>//<Key extends Comparable<Key>, Value>
 			
 		}
 	}
-	public void addNode()
+	public void addNode(Value input)
 	{
-		//set value in constructor
+		Node temp = new Node(input);
+		allNodes.add(temp);
 	}
-	
+	/*
+	public void removeNode(Value input)
+	{
+		boolean found = false;
+		int index = 0;
+		for(int i = 0; i < allNodes.size() && !found; i++)
+		{
+			Node temp = allNodes.get(i);
+			if(temp.val == input)
+			{
+				found = true;
+				index = i;
+			}
+		}
+		if(found)
+		{
+			for(int i = 0; i < temp.ances; i++)
+			{
+				
+			}
+			allNodes.remove(index);
+		}
+	}
+	*/
+	public void linkValue(Value first, Value second)
+	{
+		Node parent = new Node(null);
+		Node child = new Node(null);
+		for(int i = 0; i < allNodes.size(); i++)
+		{
+			if(allNodes.get(i).val == first)
+				parent = allNodes.get(i);
+		}
+		
+		for(int i = 0; i < allNodes.size(); i++)
+		{
+			if(allNodes.get(i).val == second)
+				child = allNodes.get(i);
+		}
+		linkNode(parent, child);
+	}
 	public void linkNode(Node parent, Node child)
 	{
 		parent.addDec(child);
 		child.addAnc(parent);
 	}
+	public String listAll()
+	{
+		String output = "";
+		for(int i = 0; i < allNodes.size(); i++)
+		{
+			output += allNodes.get(i).val;
+		}
+		return output;
+	}
+	//to get LCA, make a funct that gets two array lists of ancestors, then gives intercept. 
+	//then run through this list and make all the ancestors of each element no longer applicable(remove from list after each run through
 }
