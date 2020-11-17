@@ -59,11 +59,19 @@ public class DAG <Value>//<Key extends Comparable<Key>, Value>
         }
         public String toString()
         {
-        	String output = "";
+        	String output = "" + val;
+        	String anc = "";
+        	String dec = "";
+        	for(int i = 0; i < ancestors.size(); i++)
+    		{
+    			anc += ((i == 0)?(""):(",")) + ancestors.get(i).val;
+    		}
+        	
     		for(int i = 0; i < decendents.size(); i++)
     		{
-    			output += decendents.get(i).val;
+    			dec += ((i == 0)?(""):(",")) + decendents.get(i).val;
     		}
+    		output += "[" + anc + "]" + "[" + dec + "]";
     		return output;
         }
         public ArrayList<Node> listAllAnc()
@@ -152,7 +160,7 @@ public class DAG <Value>//<Key extends Comparable<Key>, Value>
 		String output = "";
 		for(int i = 0; i < allNodes.size(); i++)
 		{
-			output += allNodes.get(i).val;
+			output += ((i == 0)?(""):(",")) + allNodes.get(i).toString();
 		}
 		return output;
 	}

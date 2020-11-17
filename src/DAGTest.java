@@ -9,8 +9,8 @@ public class DAGTest {
 	{
 		Character[] input = {'a','b','c','d','e'};
 		DAG<Character> testDAG = new DAG(input);
-		String list = testDAG.listAll();
-		String result = "abcde";
+		String list = testDAG.listAll();//change this to use.toString from nodes
+		String result = "a[][],b[][],c[][],d[][],e[][]";
 		assertEquals(list, result);
 		
 		testDAG.linkValue('a', 'b');
@@ -21,8 +21,8 @@ public class DAGTest {
 		testDAG.linkValue('c', 'e');
 		testDAG.linkValue('d', 'e');
 		
-		String check = testDAG.allNodes.get(0).toString();
-		assertEquals(check, "bce");
+		list = testDAG.listAll();
+		result = "a[][b,c,e],b[a][d],c[a][d,e],d[a,b,c][e],e[a,c,d][]";
 		//fail("Not yet implemented");
 	}
 
