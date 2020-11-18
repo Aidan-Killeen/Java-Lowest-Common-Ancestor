@@ -2,46 +2,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DAG <Value>//<Key extends Comparable<Key>, Value> 
+public class DAG <Value>
 {
-	//protected Node allNodes[];
+
 	protected ArrayList<Node> allNodes;
 	class Node 
 	{
-        //Key key;           		// sorted by key
-        private Value val;         // associated data
+        private Value val;
 		
         ArrayList<Node> ancestors;
         ArrayList<Node> decendents;
-        /*
-        Node [] ancestors = null;  // left and right subtrees
-        Node [] decendents = null;
-        */
-        private int depth;
-        private boolean lowest = true;
-		//private Node right;
-        //private int N;             // number of nodes in subtree
 
-        /*
-        public Node(Key key, Value val, int N) 
-        {
-            this.key = key;
-            this.val = val;
-            this.N = N;
-        }
-        */
+
         public Node(Value val)
         {
         	this.val = val;
         	ancestors = new ArrayList<Node>(0);
         	decendents = new ArrayList<Node>(0);
-        	//ancestors = null;
-        	//decendents = null;
-        	depth = -1;
-        }
-        public void setDepth(int depth)
-        {
-        	this.depth = depth;
+
         }
         
         public void addAnc(Node a)
@@ -80,7 +58,7 @@ public class DAG <Value>//<Key extends Comparable<Key>, Value>
         	for(int i = 0; i < ancestors.size(); i++)
         	{
         		Node temp = (DAG<Value>.Node) this.ancestors.get(i);
-        		output.add(temp); //is this necessary?
+        		output.add(temp);
         		List<Node> listTwoCopy = new ArrayList<>(temp.listAllAnc());
                 listTwoCopy.removeAll(output);
                 output.addAll(listTwoCopy);
@@ -173,15 +151,13 @@ public class DAG <Value>//<Key extends Comparable<Key>, Value>
 		}
 		return output;
 	}
+	
+	//LCA part of DAG
 	public ArrayList<Node> findLCA(Value input1, Value input2)
 	{
-		//Node node1 = findNode(input1);
-		//Node node2 = findNode(input2);
-		
 		ArrayList<Node> ancestors1 = listAllPossAnc(input1);
 		ArrayList<Node> ancestors2 = listAllPossAnc(input2);
 		
-		//ArrayList<Node> commonAnc = 
 		ancestors1.retainAll(ancestors2);
 		
 		boolean removals = true;
@@ -204,10 +180,10 @@ public class DAG <Value>//<Key extends Comparable<Key>, Value>
 		{
 			output += ((i == 0)?(""):(",")) + allNodes.get(i).toString();
 		}
-		//System.out.println(output);
+
 		return output;
 	}
-	//change where this is?
+	
 	public String toString(ArrayList input)
 	{
 		String output = "";
@@ -215,9 +191,7 @@ public class DAG <Value>//<Key extends Comparable<Key>, Value>
 		{
 			output += ((i == 0)?(""):(",")) + input.get(i).toString();
 		}
-		//System.out.println(output);
 		return output;
 	}
-	//to get LCA, make a funct that gets two array lists of ancestors, then gives intercept. 
-	//then run through this list and make all the ancestors of each element no longer applicable(remove from list after each run through
+
 }
