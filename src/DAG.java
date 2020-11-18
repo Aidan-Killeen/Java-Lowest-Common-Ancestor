@@ -76,7 +76,7 @@ public class DAG <Value>//<Key extends Comparable<Key>, Value>
         }
         public ArrayList<Node> listAllAnc()
         {
-        	ArrayList<Node> output = null;
+        	ArrayList<Node> output = new ArrayList<Node>(0);
         	for(int i = 0; i < ancestors.size(); i++)
         	{
         		Node temp = (DAG<Value>.Node) this.ancestors.get(i);
@@ -135,33 +135,87 @@ public class DAG <Value>//<Key extends Comparable<Key>, Value>
 	*/
 	public void linkValue(Value first, Value second)
 	{
-		Node parent = new Node(null);
-		Node child = new Node(null);
-		for(int i = 0; i < allNodes.size(); i++)
-		{
-			if(allNodes.get(i).val == first)
-				parent = allNodes.get(i);
-		}
-		
-		for(int i = 0; i < allNodes.size(); i++)
-		{
-			if(allNodes.get(i).val == second)
-				child = allNodes.get(i);
-		}
+
+		Node parent = findNode(first);
+		Node child = findNode(second);
 		linkNode(parent, child);
 	}
-	public void linkNode(Node parent, Node child)
+	private void linkNode(Node parent, Node child)
 	{
 		parent.addDec(child);
 		child.addAnc(parent);
 	}
-	public String listAll()
+	
+	public ArrayList<Node> listAllPossAnc(Value input)
+    {
+    	ArrayList<Node> output = new ArrayList<Node>(0);
+    	Node valNode = findNode(input);
+    	output.add(valNode);
+    	output.addAll(valNode.listAllAnc());
+    	
+    	String check = "";
+		for(int i = 0; i < output.size(); i++)
+		{
+			check += ((i == 0)?(""):(",")) + output.get(i).toString();
+		}
+
+    	return output;
+    }
+    
+	
+	public Node findNode(Value input)
+	{
+		Node output = null;
+		for(int i = 0; i < allNodes.size() && output == null; i++)
+		{
+			if(allNodes.get(i).val == input)
+				output = allNodes.get(i);
+		}
+		return output;
+	}
+	public ArrayList<Node> findLCA(Value input1, Value input2)
+	{
+		//Node node1 = findNode(input1);
+		//Node node2 = findNode(input2);
+		
+		ArrayList<Node> ancestors1 = listAllPossAnc(input1);
+		ArrayList<Node> ancestors2 = listAllPossAnc(input2);
+		
+		//ArrayList<Node> commonAnc = 
+		ancestors1.retainAll(ancestors2);
+		
+		boolean removals = true;
+		while(removals)
+		{
+			removals = false;
+			for(int i = 0; i < ancestors1.size() && !removals; i++)
+			{
+				Node temp = ancestors1.get(i);
+				ArrayList<Node> anc = temp.listAllAnc();
+				removals = ancestors1.removeAll(anc);
+			}
+		}
+		return ancestors1;
+	}
+	public String toString()
 	{
 		String output = "";
 		for(int i = 0; i < allNodes.size(); i++)
 		{
 			output += ((i == 0)?(""):(",")) + allNodes.get(i).toString();
 		}
+		//System.out.println(output);
+		return output;
+	}
+	//change where this is?
+	public String toString(ArrayList input)
+	{
+		String output = "";
+		for(int i = 0; i < input.size(); i++)
+		{
+			output += ((i == 0)?(""):(",")) + input.get(i).toString();
+		}
+		//System.out.println(output);
 		return output;
 	}
 	//to get LCA, make a funct that gets two array lists of ancestors, then gives intercept. 
