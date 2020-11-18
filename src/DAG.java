@@ -87,30 +87,21 @@ public class DAG <Value>
 		Node temp = new Node(input);
 		allNodes.add(temp);
 	}
-	/*
+	
 	public void removeNode(Value input)
 	{
-		boolean found = false;
-		int index = 0;
-		for(int i = 0; i < allNodes.size() && !found; i++)
+		Node remove = findNode(input);
+		for(int i = 0; i < remove.ancestors.size(); i++)
 		{
-			Node temp = allNodes.get(i);
-			if(temp.val == input)
-			{
-				found = true;
-				index = i;
-			}
+			remove.ancestors.get(i).decendents.remove(remove);
 		}
-		if(found)
+		for(int i = 0; i < remove.decendents.size(); i++)
 		{
-			for(int i = 0; i < temp.ances; i++)
-			{
-				
-			}
-			allNodes.remove(index);
+			remove.decendents.get(i).ancestors.remove(remove);
 		}
+		allNodes.remove(remove);
 	}
-	*/
+	
 	public void linkValue(Value first, Value second)
 	{
 

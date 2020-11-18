@@ -25,6 +25,11 @@ public class DAGTest {
 		list = testDAG.toString();
 		result = "a[][b,c,d,e],b[a][d],c[a][d,e],d[a,b,c][e],e[a,c,d][]";
 		assertEquals(list, result);
+		
+		testDAG.removeNode('c');
+		list = testDAG.toString();
+		result = "a[][b,d,e],b[a][d],d[a,b][e],e[a,d][]";
+		assertEquals(list, result);
 		//fail("Not yet implemented");
 	}
 	
